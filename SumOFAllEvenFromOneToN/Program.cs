@@ -1,4 +1,6 @@
-﻿namespace SumOFAllEvenFromOneToN
+﻿using System.Text;
+
+namespace SumOFAllEvenFromOneToN
 {
     internal class Program
     {
@@ -15,18 +17,26 @@
                 // ask the user to enter a number
                 if(!IsNumber("a number",out nUserInput))
                     return;
-                Print($"The sum of all even numbers from 1 to {nUserInput} is: {SumEven(nUserInput)}");
-                // To read user choice to continue in the app again and validate the user input
-                if (!IsChar("y to continue in the application else enter n", out cUserChoice))
-                    return;
-                // Convert the character to lower 
-                cUserChoice = Char.ToLower(cUserChoice);
-                // To check the user input in the right format (y,n)
-                if (!IsInRightFormat(cUserChoice))
-                    return;
-                // To check if the user want to continue or not
-                if (!WantToContinue(cUserChoice))
-                    return;
+                // check if are there any even numbers or not
+                if (!CheckEvenCount(EvenNums(nUserInput)))
+                    goto Code;
+                Print(@$"Even numbers are: 
+{EvenNums(nUserInput)}
+""The sum of all even numbers from 1 to {nUserInput} is: {SumEven(nUserInput)}");
+            Code: 
+                {
+                    // To read user choice to continue in the app again and validate the user input
+                    if (!IsChar("y to continue in the application else enter n", out cUserChoice))
+                        return;
+                    // Convert the character to lower 
+                    cUserChoice = Char.ToLower(cUserChoice);
+                    // To check the user input in the right format (y,n)
+                    if (!IsInRightFormat(cUserChoice))
+                        return;
+                    // To check if the user want to continue or not
+                    if (!WantToContinue(cUserChoice))
+                        return;
+                }
             }
 
         }
@@ -113,14 +123,33 @@
             while (nCounter <= number)
             {
                 if(IsEven(nCounter))
-                {
-                    nSum += nCounter;
-                    nCounter++;
-                    continue;
-                }
+                    nSum += nCounter;    
                 nCounter++;    
             }
             return nSum;
+        }
+
+        // 9) this method to print all even numbers from 1 to n
+        static string EvenNums(int number)
+        {
+            StringBuilder sbEvenNums = new StringBuilder();
+            for (int nCounter=1;nCounter<=number;++nCounter)
+            {
+                if (IsEven(nCounter))
+                    sbEvenNums.AppendLine($"{nCounter}");
+            }
+            return sbEvenNums.ToString();
+        }
+
+        // 10) this method to check if there are no even numbers
+        static bool CheckEvenCount(string input)
+        {
+            if (input.Length == 0)
+            {
+                Print("There are no even numbers");
+                return false;
+            }
+            return true;
         }
         #endregion
 
